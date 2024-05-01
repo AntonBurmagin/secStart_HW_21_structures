@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <cmath>
 
 struct worker {
     std::string name = "unknown";
@@ -50,10 +51,37 @@ void add(std::ofstream &file) {
     // file.write((char*)&employee.salary, sizeof(employee.salary));
 }
 
+struct mathVector {
+    float x, y;
+};
+
+mathVector addMathVector(mathVector first, mathVector second) {
+    return {first.x + second.x, first.y + second.y};
+}
+
+mathVector subtractMathVector(mathVector first, mathVector second) {
+    return {first.x - second.x, first.y - second.y};
+}
+
+void scaleMathVector(mathVector &vec, float num) {
+    vec.x *= num;
+    vec.y *= num;
+}
+
+float lengthMathVector(mathVector vec) {
+    return std::sqrt(std::pow(vec.x, 2) + std::pow(vec.y, 2));
+}
+
+void normalizeMathVector (mathVector &vec) {
+    float length = lengthMathVector(vec);
+    vec.x /= length;
+    vec.y /= length;
+}
+
 
 int main() {
     //21.5.1 salary list
-    
+    /*
     while(true) {
         std::string command;
         std::cout << "Command (list, add, quit):\n";
@@ -72,4 +100,54 @@ int main() {
             std::cout << "Unknown command!" << std::endl;
         }
     }
+    */
+
+    //21.5.3 math vector
+    std::string command;
+    while(true) {
+        std::cout << "Command (add, subtract, scale, normalize, length, quit):" << std::endl;
+        std::cin >> command;
+        if (command == "quit")
+            return 0;
+        if (command == "add" || command == "subtract") {
+            mathVector first;
+            mathVector second;
+            mathVector res;
+            std::cout << "1st vector X & Y:" << std::endl;
+            std::cin >> first.x >> first.y;
+            std::cout << "2nd vector X & Y:" << std::endl;
+            std::cin >> second.x >> second.y;
+            if (command == "add") {
+                res = addMathVector(first, second);
+            } else {
+                res = subtractMathVector(first, second);
+            }
+            std::cout << "Result vector x: " << res.x << " y: " << res.y << std::endl;
+        } else if (command == "scale") {
+            mathVector vec;
+            float number;
+            std::cout << "Vector X & Y:" << std::endl;
+            std::cin >> vec.x >> vec.y;
+            std::cout << "Number:" << std::endl;
+            std::cin >> number;
+            scaleMathVector(vec, number);
+            std::cout << "Result vector x: " << vec.x << " y: " << vec.y << std::endl;
+        } else if (command == "length") {
+            mathVector vec;
+            std::cout << "Vector X & Y:" << std::endl;
+            std::cin >> vec.x >> vec.y;
+            std::cout << "Vector length: " << lengthMathVector(vec) << std::endl;
+        } else if (command == "normalize") {
+            mathVector vec;
+            std::cout << "Vector X & Y:" << std::endl;
+            std::cin >> vec.x >> vec.y;
+            normalizeMathVector(vec);
+            std::cout << "Normalized vector x: " << vec.x << " y: " << vec.y 
+                        << " length: " << lengthMathVector(vec) << std::endl;
+        } else {
+            std::cout << "Unknown command!" << std::endl;
+        }
+
+    }
+
 }
